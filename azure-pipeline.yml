@@ -1,0 +1,18 @@
+trigger:
+  - '*'
+
+# Azure need to be setup with a build agent pool named ARM
+# Inside this pool setup a raspbery pi as agent
+# Make sure the agent as Docker installed
+pool: ARM
+
+steps:
+  - checkout: self
+
+  - script: |
+      sudo docker build -t alphaaqua/utcbuild:raspbian .
+      docker login --username alphaaqua --password !DOCKERPAT!
+      docker push alphaaqua/utcbuild:raspbian
+    env:
+      DOCKERPAT: $(DockerPAT)
+      
