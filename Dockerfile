@@ -13,6 +13,6 @@ ENV PYTHONPATH=/usr/lib/python3.8/site-packages
 
 RUN apk add --update --no-cache py3-pip
 COPY requirements.txt /
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 CMD [ "node" ]
