@@ -12,6 +12,7 @@ stages:
         steps:
           - checkout: self
           - script: |
+              cd linux
               sudo docker build -t alphaaqua/utcbuild:raspbian .
             displayName: Build Docker Image
           - script: |
@@ -28,6 +29,7 @@ stages:
         steps:
           - checkout: self
           - script: |
+              cd linux
               sudo docker build -t alphaaqua/utcbuild:ubuntu .
             displayName: Build Docker Image
           - script: |
@@ -37,4 +39,20 @@ stages:
               DOCKERPAT: $(DockerPAT)
             displayName: Publish Docker Image
             condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-  
+
+      - job: Windows
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - checkout: self
+          - script: |
+              cd windows
+              docker build -t alphaaqua/utcbuild:windows .
+            displayName: Build Docker Image
+          - script: |
+              docker login --username alphaaqua --password $DOCKERPAT
+              docker push alphaaqua/utcbuild:windows
+            env:
+              DOCKERPAT: $(DockerPAT)
+            displayName: Publish Docker Image
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
