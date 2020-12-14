@@ -11,7 +11,7 @@ steps:
 
   - script: |
       sudo docker build -t alphaaqua/utcbuild:raspbian .
-      docker login --username alphaaqua --password !DOCKERPAT!
+      docker login --username alphaaqua --password $DOCKERPAT
       docker push alphaaqua/utcbuild:raspbian
     env:
       DOCKERPAT: $(DockerPAT)
