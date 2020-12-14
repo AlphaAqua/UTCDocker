@@ -14,12 +14,13 @@ stages:
           - script: |
               sudo docker build -t alphaaqua/utcbuild:raspbian .
             displayName: Build Docker Image
-            - script: |
-                docker login --username alphaaqua --password $DOCKERPAT
-                docker push alphaaqua/utcbuild:raspbian
-              env:
-                DOCKERPAT: $(DockerPAT)
-              displayName: Publish Docker Image
+          - script: |
+              docker login --username alphaaqua --password $DOCKERPAT
+              docker push alphaaqua/utcbuild:raspbian
+            env:
+              DOCKERPAT: $(DockerPAT)
+            displayName: Publish Docker Image
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
 
       - job: Ubuntu
         pool:
@@ -29,10 +30,11 @@ stages:
           - script: |
               sudo docker build -t alphaaqua/utcbuild:ubuntu .
             displayName: Build Docker Image
-            - script: |
-                docker login --username alphaaqua --password $DOCKERPAT
-                docker push alphaaqua/utcbuild:ubuntu
-              env:
-                DOCKERPAT: $(DockerPAT)
-              displayName: Publish Docker Image
-    
+          - script: |
+              docker login --username alphaaqua --password $DOCKERPAT
+              docker push alphaaqua/utcbuild:ubuntu
+            env:
+              DOCKERPAT: $(DockerPAT)
+            displayName: Publish Docker Image
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  
