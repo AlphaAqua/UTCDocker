@@ -3,16 +3,36 @@ trigger:
 
 # Azure need to be setup with a build agent pool named ARM
 # Inside this pool setup a raspbery pi as agent
-# Make sure the agent as Docker installed
-pool: ARM
+# Make sure the agent has Docker installed
+stages:
+  - stage: BuildDocker
+    jobs:
+      - job: ARM
+        pool: ARM
+        steps:
+          - checkout: self
+          - script: |
+              sudo docker build -t alphaaqua/utcbuild:raspbian .
+            displayName: Build Docker Image
+            - script: |
+                docker login --username alphaaqua --password $DOCKERPAT
+                docker push alphaaqua/utcbuild:raspbian
+              env:
+                DOCKERPAT: $(DockerPAT)
+              displayName: Publish Docker Image
 
-steps:
-  - checkout: self
-
-  - script: |
-      sudo docker build -t alphaaqua/utcbuild:raspbian .
-      docker login --username alphaaqua --password $DOCKERPAT
-      docker push alphaaqua/utcbuild:raspbian
-    env:
-      DOCKERPAT: $(DockerPAT)
-      
+      - job: Ubuntu
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - checkout: self
+          - script: |
+              sudo docker build -t alphaaqua/utcbuild:ubuntu .
+            displayName: Build Docker Image
+            - script: |
+                docker login --username alphaaqua --password $DOCKERPAT
+                docker push alphaaqua/utcbuild:ubuntu
+              env:
+                DOCKERPAT: $(DockerPAT)
+              displayName: Publish Docker Image
+    
