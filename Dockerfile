@@ -7,7 +7,7 @@ RUN apk add --no-cache --virtual .pipeline-deps readline linux-pam \
 LABEL "com.azure.dev.pipelines.agent.handler.node.path"="/usr/local/bin/node"
 
 # Install python with numpy
-RUN apk add --update --no-cache python3
+RUN apk add --update --no-cache python3=3.8.2
 RUN apk add --update --no-cache py3-numpy
 ENV PYTHONPATH=/usr/lib/python3.8/site-packages
 
