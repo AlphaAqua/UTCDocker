@@ -11,6 +11,7 @@ RUN apk add --update --no-cache python3
 RUN apk add --update --no-cache py3-numpy
 ENV PYTHONPATH=/usr/lib/python3.8/site-packages
 
+RUN apk add --update --no-cache py3-pip
 COPY requirements.txt /
 RUN pip install -r requirements.txt
 
