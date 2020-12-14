@@ -50,7 +50,7 @@ stages:
               docker build -t alphaaqua/utcbuild:windows .
             displayName: Build Docker Image
           - script: |
-              docker login --username alphaaqua --password $DOCKERPAT
+              docker login --username alphaaqua --password %DOCKERPAT%
               docker push alphaaqua/utcbuild:windows
             env:
               DOCKERPAT: $(DockerPAT)
